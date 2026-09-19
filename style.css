@@ -1,0 +1,373 @@
+/* ==========================================================================
+   OpsHub ERP — Base Skeleton Stylesheet
+   NOTE: This is structure + layout only. No JS-driven states yet
+   (filters, modals, toggles) — those get wired up once features are added.
+   ========================================================================== */
+
+/* ---------- 1. Reset & base ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #f7f5f1;
+  --color-surface: #ffffff;
+  --color-sidebar: #1f2a24;
+  --color-sidebar-text: #d9e2dc;
+  --color-text: #1c1c1c;
+  --color-text-muted: #6b6f6c;
+  --color-accent: #2f6f5e;
+  --color-accent-soft: #e4efeb;
+  --color-border: #e1ded7;
+  --color-danger: #b3492d;
+  --color-danger-soft: #f6e6e0;
+  --color-success: #3f7d53;
+
+  --radius: 6px;
+  --sidebar-width: 220px;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---------- 2. Typography ---------- */
+h1 { font-size: 2rem; font-weight: 600; }
+h2 { font-size: 1.4rem; font-weight: 600; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+p, label, td, th { font-size: 0.95rem; }
+small { font-size: 0.8rem; color: var(--color-text-muted); }
+
+/* ---------- 3. App shell layout ---------- */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 1100px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.page-header p {
+  color: var(--color-text-muted);
+}
+
+/* ---------- 4. Sidebar navigation ---------- */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--color-sidebar);
+  color: var(--color-sidebar-text);
+  flex-shrink: 0;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+.sidebar-brand span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-sidebar-text);
+  margin-top: 2px;
+}
+
+.sidebar-nav {
+  flex: 1;
+}
+
+.sidebar-nav li a {
+  display: block;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  color: var(--color-sidebar-text);
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav li a:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* JS will add/remove this class on the current page's link */
+.sidebar-nav li a.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  border-left-color: var(--color-accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding: 12px 24px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-footer a {
+  display: block;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  color: var(--color-sidebar-text);
+}
+
+/* ---------- 5. Buttons & forms ---------- */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.form-field {
+  margin-bottom: 18px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  background: var(--color-surface);
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* ---------- 6. Cards ---------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+.stat-card .stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.stat-card.alert .stat-value {
+  color: var(--color-danger);
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+/* ---------- 7. Toolbar (search + filter row) ---------- */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.toolbar-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toolbar-filters input,
+.toolbar-filters select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+/* ---------- 8. Table ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 12px;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid var(--color-border);
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-ok {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.status-low {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+/* ---------- 9. Login page ---------- */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-sidebar);
+  padding: 20px;
+}
+
+.login-card {
+  background: var(--color-surface);
+  width: 100%;
+  max-width: 380px;
+  padding: 40px 36px;
+  border-radius: var(--radius);
+}
+
+.login-card h1 {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.login-card > p {
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+
+.login-card .btn-primary {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+/* ---------- 10. Responsive ---------- */
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    overflow-x: auto;
+  }
+
+  .sidebar-brand {
+    border-bottom: none;
+    padding: 0 16px 0 0;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .sidebar-brand span {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: flex;
+  }
+
+  .sidebar-nav li a {
+    padding: 8px 14px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+
+  .sidebar-nav li a.is-active {
+    border-left-color: transparent;
+    border-bottom-color: var(--color-accent);
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .main-content {
+    padding: 24px 20px;
+  }
+}

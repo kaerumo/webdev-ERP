@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITPC — Login</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!--
+    LOGIN PAGE
+    - This form has no real authentication (that's not required) — later
+      you can add JS validation (empty fields, basic format checks) here.
+  -->
+
+    <div class="login-screen">
+      <div class="login-card">
+        <h1>ITPC</h1>
+        <p>Sign in to manage council assets and officers.</p>
+
+        <form action="#" method="post">
+          <div class="form-field">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <!-- Temporary link — swap for real routing logic once JS is added -->
+          <button
+            type="submit"
+            class="btn btn-primary"
+            onclick="
+              window.location.href = 'dashboard.html';
+              return false;
+            "
+          >
+            Log In
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

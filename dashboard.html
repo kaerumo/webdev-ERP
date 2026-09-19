@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITPC — Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- ============ SIDEBAR NAVIGATION ============
+         Shared across every page. Once you add JS, give the current
+         page's link the "is-active" class automatically. -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          ITPC
+          <span>Program Council ERP</span>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="dashboard.html" class="is-active">Dashboard</a></li>
+          <li><a href="inventory.html">Inventory</a></li>
+          <li><a href="hr.html">Officers</a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <a href="index.html">Log Out</a>
+        </div>
+      </aside>
+
+      <!-- ============ MAIN CONTENT ============ -->
+      <main class="main-content">
+        <div class="page-header">
+          <div>
+            <h1>Dashboard</h1>
+            <p>Overview of today's operations.</p>
+          </div>
+        </div>
+
+        <!-- Quick-glance stats — hook these up to real numbers later -->
+        <section class="stat-grid">
+          <div class="stat-card">
+            <small>Total Inventory Items</small>
+            <div class="stat-value">0</div>
+          </div>
+          <div class="stat-card alert">
+            <small>Low Stock Alerts</small>
+            <div class="stat-value">0</div>
+          </div>
+          <div class="stat-card">
+            <small>Active Officers Today</small>
+            <div class="stat-value">0</div>
+          </div>
+        </section>
+
+        <!-- Module previews / recent activity -->
+        <section class="panel">
+          <h2>Recent Activity</h2>
+          <p>
+            <small
+              >This section can later list recent asset changes or officer
+              updates.</small
+            >
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

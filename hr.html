@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITPC — Officers</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          ITPC
+          <span>Program Council ERP</span>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="inventory.html">Inventory</a></li>
+          <li><a href="hr.html" class="is-active">Officers</a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <a href="index.html">Log Out</a>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <div class="page-header">
+          <div>
+            <h1>Officers</h1>
+            <p>See current officers, their committee, and status.</p>
+          </div>
+          <button class="btn btn-primary">+ Add Officer</button>
+        </div>
+
+        <div class="toolbar">
+          <input
+            type="text"
+            placeholder="Search officers..."
+            aria-label="Search officers"
+          />
+          <div class="toolbar-filters">
+            <select aria-label="Filter by position">
+              <option value="">All Positions</option>
+              <option value="president">President</option>
+              <option value="committee-head">Committee Head</option>
+              <option value="member">Member</option>
+            </select>
+            <select aria-label="Filter by status">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sample rows only — replace with your real staff list -->
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Committee</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sample Officer A</td>
+                <td>Committee Head</td>
+                <td>Events</td>
+                <td><span class="status-badge status-ok">Active</span></td>
+                <td><a href="#">View</a></td>
+              </tr>
+              <tr>
+                <td>Sample Officer B</td>
+                <td>Member</td>
+                <td>Logistics</td>
+                <td><span class="status-badge status-low">Inactive</span></td>
+                <td><a href="#">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

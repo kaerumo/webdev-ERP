@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITPC — Inventory</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          ITPC
+          <span>Program Council ERP</span>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="inventory.html" class="is-active">Inventory</a></li>
+          <li><a href="hr.html">Officers</a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <a href="index.html">Log Out</a>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <div class="page-header">
+          <div>
+            <h1>Inventory</h1>
+            <p>Track council assets, merch, and event materials.</p>
+          </div>
+          <button class="btn btn-primary">+ Add Item</button>
+        </div>
+
+        <!-- Toolbar: search + filters — wire these up to JS once filtering
+           logic is added. For now they're just markup. -->
+        <div class="toolbar">
+          <input
+            type="text"
+            placeholder="Search items..."
+            aria-label="Search inventory"
+          />
+          <div class="toolbar-filters">
+            <select aria-label="Filter by category">
+              <option value="">All Categories</option>
+              <option value="merchandise">Merchandise</option>
+              <option value="event-materials">Event Materials</option>
+              <option value="office-supplies">Office Supplies</option>
+            </select>
+            <select aria-label="Filter by status">
+              <option value="">All Statuses</option>
+              <option value="in-stock">In Stock</option>
+              <option value="low">Low Stock</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sample rows only — replace with your real item list -->
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ITPC Org T-Shirts (S-XL)</td>
+                <td>Merchandise</td>
+                <td>35</td>
+                <td><span class="status-badge status-ok">In Stock</span></td>
+                <td><a href="#">View</a></td>
+              </tr>
+              <tr>
+                <td>Tarpaulins (event banners)</td>
+                <td>Event Materials</td>
+                <td>2</td>
+                <td><span class="status-badge status-low">Low Stock</span></td>
+                <td><a href="#">View</a></td>
+              </tr>
+              <tr>
+                <td>Certificate Holders</td>
+                <td>Office Supplies</td>
+                <td>15</td>
+                <td><span class="status-badge status-ok">In Stock</span></td>
+                <td><a href="#">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
