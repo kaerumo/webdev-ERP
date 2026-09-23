@@ -17,7 +17,7 @@
         <ul class="sidebar-nav">
           <li><a href="dashboard.html">Dashboard</a></li>
           <li><a href="inventory.html">Inventory</a></li>
-          <li><a href="hr.html" class="is-active">Officers</a></li>
+          <li><a href="hr.html">Officers</a></li>
         </ul>
 
         <div class="sidebar-footer">
@@ -31,23 +31,26 @@
             <h1>Officers</h1>
             <p>See current officers, their committee, and status.</p>
           </div>
-          <button class="btn btn-primary">+ Add Officer</button>
+          <button class="btn btn-primary admin-only" id="addOfficerBtn">
+            + Add Officer
+          </button>
         </div>
 
         <div class="toolbar">
           <input
             type="text"
+            id="searchInput"
             placeholder="Search officers..."
             aria-label="Search officers"
           />
           <div class="toolbar-filters">
-            <select aria-label="Filter by position">
+            <select id="positionFilter" aria-label="Filter by position">
               <option value="">All Positions</option>
               <option value="president">President</option>
               <option value="committee-head">Committee Head</option>
               <option value="member">Member</option>
             </select>
-            <select aria-label="Filter by status">
+            <select id="statusFilter" aria-label="Filter by status">
               <option value="">All Statuses</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
@@ -55,7 +58,6 @@
           </div>
         </div>
 
-        <!-- Sample rows only — replace with your real staff list -->
         <div class="panel">
           <table>
             <thead>
@@ -67,20 +69,26 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
+            <tbody id="officerTableBody">
+              <tr data-position="committee-head" data-status="active">
                 <td>Sample Officer A</td>
                 <td>Committee Head</td>
                 <td>Events</td>
                 <td><span class="status-badge status-ok">Active</span></td>
-                <td><a href="#">View</a></td>
+                <td>
+                  <a href="#" class="view-link">View</a>
+                  <a href="#" class="delete-link admin-only">Delete</a>
+                </td>
               </tr>
-              <tr>
+              <tr data-position="member" data-status="inactive">
                 <td>Sample Officer B</td>
                 <td>Member</td>
                 <td>Logistics</td>
                 <td><span class="status-badge status-low">Inactive</span></td>
-                <td><a href="#">View</a></td>
+                <td>
+                  <a href="#" class="view-link">View</a>
+                  <a href="#" class="delete-link admin-only">Delete</a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -88,6 +96,51 @@
       </main>
     </div>
 
-    <script src="js/main.js"></script>
+    <div class="modal-overlay" id="viewModal">
+      <div class="modal-box">
+        <button class="modal-close" id="viewModalClose" aria-label="Close">
+          &times;
+        </button>
+        <h2>Officer details</h2>
+        <div id="viewModalBody"></div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="addOfficerModal">
+      <div class="modal-box">
+        <button
+          class="modal-close"
+          id="addOfficerModalClose"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+        <h2>Add officer</h2>
+        <form id="addOfficerForm">
+          <div class="form-field">
+            <label for="officerName">Name</label>
+            <input type="text" id="officerName" name="officerName" />
+          </div>
+          <div class="form-field">
+            <label for="officerPosition">Position</label>
+            <select id="officerPosition" name="officerPosition">
+              <option value="president">President</option>
+              <option value="committee-head">Committee Head</option>
+              <option value="member">Member</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="officerCommittee">Committee</label>
+            <input type="text" id="officerCommittee" name="officerCommittee" />
+          </div>
+          <p id="addOfficerError" class="form-error" hidden></p>
+          <button type="submit" class="btn btn-primary">Add officer</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="main.js"></script>
   </body>
 </html>

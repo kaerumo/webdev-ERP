@@ -14,9 +14,11 @@
           <span>Program Council ERP</span>
         </div>
 
+        <!-- No hardcoded "is-active" here anymore — main.js sets it
+           based on the current page (Feature 1: Active nav highlighting) -->
         <ul class="sidebar-nav">
           <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="inventory.html" class="is-active">Inventory</a></li>
+          <li><a href="inventory.html">Inventory</a></li>
           <li><a href="hr.html">Officers</a></li>
         </ul>
 
@@ -31,25 +33,28 @@
             <h1>Inventory</h1>
             <p>Track council assets, merch, and event materials.</p>
           </div>
-          <button class="btn btn-primary">+ Add Item</button>
+          <!-- Feature 5: only shown to admins -->
+          <button class="btn btn-primary admin-only" id="addItemBtn">
+            + Add Item
+          </button>
         </div>
 
-        <!-- Toolbar: search + filters — wire these up to JS once filtering
-           logic is added. For now they're just markup. -->
+        <!-- Feature 2: Search + filter -->
         <div class="toolbar">
           <input
             type="text"
+            id="searchInput"
             placeholder="Search items..."
             aria-label="Search inventory"
           />
           <div class="toolbar-filters">
-            <select aria-label="Filter by category">
+            <select id="categoryFilter" aria-label="Filter by category">
               <option value="">All Categories</option>
               <option value="merchandise">Merchandise</option>
               <option value="event-materials">Event Materials</option>
               <option value="office-supplies">Office Supplies</option>
             </select>
-            <select aria-label="Filter by status">
+            <select id="statusFilter" aria-label="Filter by status">
               <option value="">All Statuses</option>
               <option value="in-stock">In Stock</option>
               <option value="low">Low Stock</option>
@@ -57,7 +62,6 @@
           </div>
         </div>
 
-        <!-- Sample rows only — replace with your real item list -->
         <div class="panel">
           <table>
             <thead>
@@ -69,27 +73,38 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>ITPC Org T-Shirts (S-XL)</td>
+            <!-- Feature 3: rows carry data-category / data-status so JS
+               can filter without re-reading visible text. -->
+            <tbody id="inventoryTableBody">
+              <tr data-category="merchandise" data-status="in-stock">
+                <td>CSITPC Org T-Shirts (S-XL)</td>
                 <td>Merchandise</td>
                 <td>35</td>
                 <td><span class="status-badge status-ok">In Stock</span></td>
-                <td><a href="#">View</a></td>
+                <td>
+                  <a href="#" class="view-link">View</a>
+                  <a href="#" class="delete-link admin-only">Delete</a>
+                </td>
               </tr>
-              <tr>
+              <tr data-category="event-materials" data-status="low">
                 <td>Tarpaulins (event banners)</td>
                 <td>Event Materials</td>
                 <td>2</td>
                 <td><span class="status-badge status-low">Low Stock</span></td>
-                <td><a href="#">View</a></td>
+                <td>
+                  <a href="#" class="view-link">View</a>
+                  <a href="#" class="delete-link admin-only">Delete</a>
+                </td>
               </tr>
-              <tr>
+              <tr data-category="office-supplies" data-status="in-stock">
                 <td>Certificate Holders</td>
                 <td>Office Supplies</td>
                 <td>15</td>
                 <td><span class="status-badge status-ok">In Stock</span></td>
-                <td><a href="#">View</a></td>
+                <td>
+                  <a href="#" class="view-link">View</a>
+                  <a href="#" class="delete-link admin-only">Delete</a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -97,6 +112,55 @@
       </main>
     </div>
 
-    <script src="js/main.js"></script>
+    <!-- Feature 3: View-detail modal (shared shell, filled in by JS) -->
+    <div class="modal-overlay" id="viewModal">
+      <div class="modal-box">
+        <button class="modal-close" id="viewModalClose" aria-label="Close">
+          &times;
+        </button>
+        <h2>Item details</h2>
+        <div id="viewModalBody"></div>
+      </div>
+    </div>
+
+    <!-- Feature 4: Add-item modal -->
+    <div class="modal-overlay" id="addItemModal">
+      <div class="modal-box">
+        <button class="modal-close" id="addItemModalClose" aria-label="Close">
+          &times;
+        </button>
+        <h2>Add inventory item</h2>
+        <form id="addItemForm">
+          <div class="form-field">
+            <label for="itemName">Item name</label>
+            <input type="text" id="itemName" name="itemName" />
+          </div>
+          <div class="form-field">
+            <label for="itemCategory">Category</label>
+            <select id="itemCategory" name="itemCategory">
+              <option value="merchandise">Merchandise</option>
+              <option value="event-materials">Event Materials</option>
+              <option value="office-supplies">Office Supplies</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="itemQuantity">Quantity</label>
+            <input
+              type="number"
+              id="itemQuantity"
+              name="itemQuantity"
+              min="0"
+            />
+          </div>
+          <p id="addItemError" class="form-error" hidden></p>
+          <button type="submit" class="btn btn-primary">Add item</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Feature 6: Toast for success messages -->
+    <div class="toast" id="toast"></div>
+
+    <script src="main.js"></script>
   </body>
 </html>

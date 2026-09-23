@@ -378,7 +378,7 @@ tbody td {
   color: var(--color-danger);
 }
 
-/* ---------- 9. Login page ---------- */
+/* ---------- 9. Login page  ---------- */
 .login-screen {
   min-height: 100vh;
   display: flex;
