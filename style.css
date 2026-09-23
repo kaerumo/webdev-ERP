@@ -51,11 +51,28 @@ img {
 }
 
 /* ---------- 2. Typography ---------- */
-h1 { font-size: 2rem; font-weight: 600; }
-h2 { font-size: 1.4rem; font-weight: 600; }
-h3 { font-size: 1.1rem; font-weight: 600; }
-p, label, td, th { font-size: 0.95rem; }
-small { font-size: 0.8rem; color: var(--color-text-muted); }
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+p,
+label,
+td,
+th {
+  font-size: 0.95rem;
+}
+small {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
 
 /* ---------- 3. App shell layout ---------- */
 .app-shell {
@@ -194,6 +211,79 @@ small { font-size: 0.8rem; color: var(--color-text-muted); }
   outline-offset: 1px;
 }
 
+.form-error {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--color-sidebar);
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-overlay.is-open {
+  display: flex;
+}
+
+.modal-box {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 28px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-box h2 {
+  margin-bottom: 16px;
+}
+
+.modal-close {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+
+/* Hidden until JS decides the role should see it */
+.admin-only {
+  display: none;
+}
+
 /* ---------- 6. Cards ---------- */
 .stat-grid {
   display: grid;
@@ -320,6 +410,23 @@ tbody td {
   width: 100%;
   padding: 12px;
   margin-top: 8px;
+}
+
+.demo-hint {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.demo-hint code {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.78rem;
 }
 
 /* ---------- 10. Responsive ---------- */

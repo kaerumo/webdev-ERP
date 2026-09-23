@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ITPC — Login</title>
+    <title>CSITPC — Login</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -13,12 +13,19 @@
       you can add JS validation (empty fields, basic format checks) here.
   -->
 
+    <!-- TODO: DUMMY ACCOUNTS:
+
+      Admin: admin admin123
+      Member: member member123
+  
+    -->
+
     <div class="login-screen">
       <div class="login-card">
-        <h1>ITPC</h1>
+        <h1>CSITPC</h1>
         <p>Sign in to manage council assets and officers.</p>
 
-        <form action="#" method="post">
+        <form id="loginForm">
           <div class="form-field">
             <label for="username">Username</label>
             <input
@@ -39,21 +46,13 @@
             />
           </div>
 
-          <!-- Temporary link — swap for real routing logic once JS is added -->
-          <button
-            type="submit"
-            class="btn btn-primary"
-            onclick="
-              window.location.href = 'dashboard.html';
-              return false;
-            "
-          >
-            Log In
-          </button>
+          <p id="loginError" class="form-error" hidden></p>
+
+          <button type="submit" class="btn btn-primary">Log In</button>
         </form>
       </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>
