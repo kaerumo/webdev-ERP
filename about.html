@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ITPC — Inventory</title>
+    <title>ITPC — About</title>
     <link rel="icon" type="image/png" href="assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -132,74 +132,66 @@
       <main class="main-content">
         <div class="page-header">
           <div>
-            <h1>Inventory</h1>
-            <p>Track council assets, merch, and event materials.</p>
-          </div>
-          <button class="btn btn-primary admin-only" id="addItemBtn">
-            + Add item
-          </button>
-        </div>
-
-        <!-- Search + filters. Each select's data-filter matches a data-*
-           attribute on the table rows. -->
-        <div class="toolbar">
-          <div class="search-wrap">
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search items..."
-              aria-label="Search inventory"
-            />
-            <kbd aria-hidden="true">/</kbd>
-          </div>
-          <div class="toolbar-filters">
-            <select
-              id="categoryFilter"
-              data-filter="category"
-              aria-label="Filter by category"
-            >
-              <option value="">All categories</option>
-              <option value="merchandise">Merchandise</option>
-              <option value="event-materials">Event materials</option>
-              <option value="office-supplies">Office supplies</option>
-            </select>
-            <select
-              id="statusFilter"
-              data-filter="status"
-              aria-label="Filter by status"
-            >
-              <option value="">All statuses</option>
-              <option value="in-stock">In stock</option>
-              <option value="low">Low stock</option>
-            </select>
-            <span
-              class="result-count"
-              id="resultCount"
-              aria-live="polite"
-            ></span>
+            <h1>About</h1>
+            <p>Who we are and what this system is for.</p>
           </div>
         </div>
 
-        <div class="panel">
-          <table>
-            <thead>
-              <tr>
-                <!-- data-sort headers are clickable (sortable columns) -->
-                <th data-sort="name">Item name</th>
-                <th data-sort="category">Category</th>
-                <th data-sort="quantity">Quantity</th>
-                <th data-sort="status">Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <!-- Rows are rendered by main.js from saved data -->
-            <tbody id="inventoryTableBody"></tbody>
-          </table>
-          <div class="empty-state" id="emptyState" hidden>
-            <strong>No items found</strong>
-            Try a different search or filter.
-          </div>
-        </div>
+        <section class="panel about-intro">
+          <div class="panel-header"><h2>About ITPC</h2></div>
+          <p>
+            ITPC is the IT Program Council of De La Salle University &ndash;
+            Dasmari&ntilde;as (DLSU-D). The council runs events, workshops and
+            activities for its members, and looks after the materials and
+            officers that make them happen.
+          </p>
+          <!-- TODO: add the council's mission, vision, history and adviser here -->
+        </section>
+
+        <section class="panel">
+          <div class="panel-header"><h2>What this system does</h2></div>
+          <p class="about-lead">
+            The ITPC Program Council ERP keeps the council's day-to-day records
+            in one place, so nothing lives in scattered chats and spreadsheets.
+          </p>
+          <ul class="about-features">
+            <li>
+              <strong>Inventory</strong>
+              <span>Track merchandise, event materials and office supplies, with low-stock alerts.</span>
+            </li>
+            <li>
+              <strong>Officers</strong>
+              <span>See every officer, their position, committee and active status.</span>
+            </li>
+            <li>
+              <strong>Events</strong>
+              <span>Plan meetings, workshops, seminars and socials on a shared calendar.</span>
+            </li>
+            <li>
+              <strong>Change log</strong>
+              <span>A record of who changed what, and when, across the whole system.</span>
+            </li>
+            <li>
+              <strong>Reports &amp; backups</strong>
+              <span>Print a status report or download a backup of all the data.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header"><h2>The developers</h2></div>
+          <ul class="dev-list">
+            <li>
+              <span class="user-avatar" aria-hidden="true">JM</span>
+              <strong>James Montuya</strong>
+            </li>
+            <li>
+              <span class="user-avatar" aria-hidden="true">WY</span>
+              <strong>Wyethh Yumang</strong>
+            </li>
+          </ul>
+        </section>
+
         <footer class="site-footer">
           <div class="footer-grid">
             <div class="footer-brand">
@@ -256,66 +248,6 @@
         </footer>
       </main>
     </div>
-
-    <!-- Detail modal: title and list are filled in by main.js -->
-    <div
-      class="modal-overlay"
-      id="viewModal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="viewModalTitle"
-    >
-      <div class="modal-box">
-        <button class="modal-close" aria-label="Close">&times;</button>
-        <h2 id="viewModalTitle">Details</h2>
-        <ul id="viewModalBody"></ul>
-      </div>
-    </div>
-
-    <!-- Add / Edit item modal. The same form is used for both; main.js
-       changes the title and button text depending on the mode. -->
-    <div
-      class="modal-overlay"
-      id="addItemModal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="addItemTitle"
-    >
-      <div class="modal-box">
-        <button class="modal-close" aria-label="Close">&times;</button>
-        <h2 id="addItemTitle">Add inventory item</h2>
-        <form id="addItemForm" novalidate>
-          <div class="form-field">
-            <label for="itemName">Item name</label>
-            <input type="text" id="itemName" name="itemName" />
-          </div>
-          <div class="form-field">
-            <label for="itemCategory">Category</label>
-            <select id="itemCategory" name="itemCategory">
-              <option value="merchandise">Merchandise</option>
-              <option value="event-materials">Event materials</option>
-              <option value="office-supplies">Office supplies</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="itemQuantity">Quantity</label>
-            <input
-              type="number"
-              id="itemQuantity"
-              name="itemQuantity"
-              min="0"
-              step="1"
-            />
-          </div>
-          <p id="addItemError" class="form-error" hidden></p>
-          <button type="submit" class="btn btn-primary" id="addItemSubmit">
-            Add item
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ITPC — Inventory</title>
+    <title>ITPC — Contact</title>
     <link rel="icon" type="image/png" href="assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -132,74 +132,62 @@
       <main class="main-content">
         <div class="page-header">
           <div>
-            <h1>Inventory</h1>
-            <p>Track council assets, merch, and event materials.</p>
-          </div>
-          <button class="btn btn-primary admin-only" id="addItemBtn">
-            + Add item
-          </button>
-        </div>
-
-        <!-- Search + filters. Each select's data-filter matches a data-*
-           attribute on the table rows. -->
-        <div class="toolbar">
-          <div class="search-wrap">
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search items..."
-              aria-label="Search inventory"
-            />
-            <kbd aria-hidden="true">/</kbd>
-          </div>
-          <div class="toolbar-filters">
-            <select
-              id="categoryFilter"
-              data-filter="category"
-              aria-label="Filter by category"
-            >
-              <option value="">All categories</option>
-              <option value="merchandise">Merchandise</option>
-              <option value="event-materials">Event materials</option>
-              <option value="office-supplies">Office supplies</option>
-            </select>
-            <select
-              id="statusFilter"
-              data-filter="status"
-              aria-label="Filter by status"
-            >
-              <option value="">All statuses</option>
-              <option value="in-stock">In stock</option>
-              <option value="low">Low stock</option>
-            </select>
-            <span
-              class="result-count"
-              id="resultCount"
-              aria-live="polite"
-            ></span>
+            <h1>Contact</h1>
+            <p>Questions, suggestions or something to report? Reach the council here.</p>
           </div>
         </div>
 
-        <div class="panel">
-          <table>
-            <thead>
-              <tr>
-                <!-- data-sort headers are clickable (sortable columns) -->
-                <th data-sort="name">Item name</th>
-                <th data-sort="category">Category</th>
-                <th data-sort="quantity">Quantity</th>
-                <th data-sort="status">Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <!-- Rows are rendered by main.js from saved data -->
-            <tbody id="inventoryTableBody"></tbody>
-          </table>
-          <div class="empty-state" id="emptyState" hidden>
-            <strong>No items found</strong>
-            Try a different search or filter.
-          </div>
+        <div class="contact-grid">
+          <a class="contact-card" href="mailto:itprogramcouncil@gmail.com">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M3 7l9 6 9-6" />
+            </svg>
+            <span>
+              <small>Email</small>
+              <strong>itprogramcouncil@gmail.com</strong>
+            </span>
+          </a>
+          <a
+            class="contact-card"
+            href="https://web.facebook.com/DLSUD.ITPC"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z" />
+            </svg>
+            <span>
+              <small>Facebook</small>
+              <strong>DLSUD.ITPC</strong>
+            </span>
+          </a>
         </div>
+
+        <section class="panel contact-panel">
+          <div class="panel-header"><h2>Send us a message</h2></div>
+          <form id="contactForm" novalidate>
+            <div class="form-field">
+              <label for="contactName">Your name</label>
+              <input type="text" id="contactName" name="contactName" />
+            </div>
+            <div class="form-field">
+              <label for="contactSubject">Subject</label>
+              <input type="text" id="contactSubject" name="contactSubject" />
+            </div>
+            <div class="form-field">
+              <label for="contactMessage">Message</label>
+              <textarea id="contactMessage" name="contactMessage" rows="6"></textarea>
+            </div>
+            <p id="contactError" class="form-error" hidden></p>
+            <button type="submit" class="btn btn-primary">Send message</button>
+            <p class="contact-note">
+              This opens your email app with the message filled in, ready to send
+              to itprogramcouncil@gmail.com.
+            </p>
+          </form>
+        </section>
+
         <footer class="site-footer">
           <div class="footer-grid">
             <div class="footer-brand">
@@ -257,67 +245,35 @@
       </main>
     </div>
 
-    <!-- Detail modal: title and list are filled in by main.js -->
-    <div
-      class="modal-overlay"
-      id="viewModal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="viewModalTitle"
-    >
-      <div class="modal-box">
-        <button class="modal-close" aria-label="Close">&times;</button>
-        <h2 id="viewModalTitle">Details</h2>
-        <ul id="viewModalBody"></ul>
-      </div>
-    </div>
-
-    <!-- Add / Edit item modal. The same form is used for both; main.js
-       changes the title and button text depending on the mode. -->
-    <div
-      class="modal-overlay"
-      id="addItemModal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="addItemTitle"
-    >
-      <div class="modal-box">
-        <button class="modal-close" aria-label="Close">&times;</button>
-        <h2 id="addItemTitle">Add inventory item</h2>
-        <form id="addItemForm" novalidate>
-          <div class="form-field">
-            <label for="itemName">Item name</label>
-            <input type="text" id="itemName" name="itemName" />
-          </div>
-          <div class="form-field">
-            <label for="itemCategory">Category</label>
-            <select id="itemCategory" name="itemCategory">
-              <option value="merchandise">Merchandise</option>
-              <option value="event-materials">Event materials</option>
-              <option value="office-supplies">Office supplies</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="itemQuantity">Quantity</label>
-            <input
-              type="number"
-              id="itemQuantity"
-              name="itemQuantity"
-              min="0"
-              step="1"
-            />
-          </div>
-          <p id="addItemError" class="form-error" hidden></p>
-          <button type="submit" class="btn btn-primary" id="addItemSubmit">
-            Add item
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
+    <script>
+      // No server here, so the form builds an email and opens the user's mail app.
+      (function () {
+        var form = document.getElementById("contactForm");
+        if (!form) return;
+        var errorEl = document.getElementById("contactError");
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var name = document.getElementById("contactName").value.trim();
+          var subject = document.getElementById("contactSubject").value.trim();
+          var message = document.getElementById("contactMessage").value.trim();
+
+          if (name === "" || subject === "" || message === "") {
+            errorEl.textContent = "Please fill in your name, a subject and a message.";
+            errorEl.hidden = false;
+            return;
+          }
+          errorEl.hidden = true;
+
+          var body = message + "\n\n- " + name;
+          window.location.href =
+            "mailto:itprogramcouncil@gmail.com" +
+            "?subject=" + encodeURIComponent(subject) +
+            "&body=" + encodeURIComponent(body);
+        });
+      })();
+    </script>
   </body>
 </html>
