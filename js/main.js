@@ -12,6 +12,7 @@
 //   I. Events + calendar (Events page and Dashboard widget)
 //   J. Backup & restore (JSON)      K. Printable report
 //   L. Change log page (the audit trail itself is recorded by recordChange)
+//   N. Mobile menu (top bar + slide-in sidebar on phones)
 // ============================================================
 
 // ============================================================
@@ -725,14 +726,14 @@ function inventoryRowHTML(item, maxQty) {
         data-status="${status}"
         data-search="${escapeHTML(searchText)}">
       <td>${escapeHTML(item.name)}</td>
-      <td>${categoryLabel}</td>
-      <td>
+      <td data-label="Category">${categoryLabel}</td>
+      <td data-label="Quantity">
         <div class="qty-cell">
           <b>${item.quantity}</b>
           <span class="meter ${isLow ? "is-low" : ""}"><i style="width:${fillPercent}%"></i></span>
         </div>
       </td>
-      <td><span class="status-badge ${isLow ? "status-low" : "status-ok"}">${statusLabel}</span></td>
+      <td data-label="Status"><span class="status-badge ${isLow ? "status-low" : "status-ok"}">${statusLabel}</span></td>
       <td>
         <a href="#" class="view-link">View</a>
         <a href="#" class="edit-link admin-only">Edit</a>
@@ -960,9 +961,9 @@ function officerRowHTML(officer) {
           ${escapeHTML(officer.name)}
         </div>
       </td>
-      <td>${positionLabel}</td>
-      <td>${escapeHTML(officer.committee)}</td>
-      <td><span class="status-badge ${isActive ? "status-ok" : "status-low"}">${statusLabel}</span></td>
+      <td data-label="Position">${positionLabel}</td>
+      <td data-label="Committee">${escapeHTML(officer.committee)}</td>
+      <td data-label="Status"><span class="status-badge ${isActive ? "status-ok" : "status-low"}">${statusLabel}</span></td>
       <td>
         <a href="#" class="view-link">View</a>
         <a href="#" class="edit-link admin-only">Edit</a>
@@ -2193,11 +2194,11 @@ function setupChangelogPage() {
       .map(
         (e) => `
       <tr>
-        <td class="log-when"><time datetime="${escapeHTML(e.time)}">${escapeHTML(formatFullTime(e.time))}</time></td>
-        <td><strong>${escapeHTML(e.user)}</strong><small class="log-role">${e.role === "admin" ? "Administrator" : "Member"}</small></td>
-        <td>${escapeHTML(MODULE_LABELS[e.module] || e.module)}</td>
-        <td><span class="log-action is-${escapeHTML(e.action)}">${escapeHTML(ACTION_LABELS[e.action] || e.action)}</span></td>
-        <td><strong>${escapeHTML(e.target)}</strong>${changeDetailsHTML(e)}</td>
+        <td class="log-when" data-label="When"><time datetime="${escapeHTML(e.time)}">${escapeHTML(formatFullTime(e.time))}</time></td>
+        <td data-label="Who"><strong>${escapeHTML(e.user)}</strong><small class="log-role">${e.role === "admin" ? "Administrator" : "Member"}</small></td>
+        <td data-label="Module">${escapeHTML(MODULE_LABELS[e.module] || e.module)}</td>
+        <td data-label="Action"><span class="log-action is-${escapeHTML(e.action)}">${escapeHTML(ACTION_LABELS[e.action] || e.action)}</span></td>
+        <td data-label="Change"><strong>${escapeHTML(e.target)}</strong>${changeDetailsHTML(e)}</td>
       </tr>`,
       )
       .join("");
@@ -2284,6 +2285,134 @@ function setupThemeToggle() {
 }
 
 // ============================================================
+// N. MOBILE MENU (phones and small tablets, <= 768px)
+// On small screens the sidebar becomes a slide-in menu. This adds the pieces
+// the HTML pages do not have: a top bar with a menu button, a dark backdrop,
+// and a close button inside the menu. On desktop they stay hidden (CSS), so
+// the HTML pages themselves do not need to change.
+// ============================================================
+function setupMobileNav() {
+  const shell = document.querySelector(".app-shell");
+  const sidebar = document.querySelector(".sidebar");
+  if (!shell || !sidebar) return; // login page, report page
+
+  // Title for the top bar = the page you are on
+  const activeLink = sidebar.querySelector(".sidebar-nav a.is-active");
+  const pageName = activeLink ? activeLink.textContent.trim() : "ITPC";
+  const brandLink = sidebar.querySelector(".sidebar-brand");
+  const brandImg = sidebar.querySelector(".sidebar-brand img");
+
+  if (!sidebar.id) sidebar.id = "sidebarMenu";
+
+  const bar = document.createElement("header");
+  bar.className = "mobile-bar";
+  bar.innerHTML = `
+    <button type="button" class="menu-btn" aria-label="Open menu"
+            aria-expanded="false" aria-controls="${sidebar.id}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+    </button>
+    <a class="mobile-bar-brand">
+      <img alt="" width="32" height="32" />
+      <span class="mobile-bar-title"></span>
+    </a>`;
+  bar.querySelector(".mobile-bar-title").textContent = pageName;
+  bar
+    .querySelector(".mobile-bar-brand")
+    .setAttribute("href", brandLink ? brandLink.getAttribute("href") : "#");
+  if (brandImg) {
+    bar.querySelector("img").setAttribute("src", brandImg.getAttribute("src"));
+  }
+  shell.insertBefore(bar, shell.firstChild);
+
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "nav-close";
+  closeBtn.setAttribute("aria-label", "Close menu");
+  closeBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>';
+  sidebar.insertBefore(closeBtn, sidebar.firstChild);
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "nav-backdrop";
+  document.body.appendChild(backdrop);
+
+  const menuBtn = bar.querySelector(".menu-btn");
+  const phone = window.matchMedia("(max-width: 768px)");
+
+  function isOpen() {
+    return sidebar.classList.contains("is-open");
+  }
+
+  function setOpen(open, returnFocus) {
+    sidebar.classList.toggle("is-open", open);
+    backdrop.classList.toggle("is-open", open);
+    document.body.classList.toggle("nav-open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    if (open) closeBtn.focus();
+    else if (returnFocus) menuBtn.focus();
+  }
+
+  menuBtn.addEventListener("click", () => setOpen(true));
+  closeBtn.addEventListener("click", () => setOpen(false, true));
+  backdrop.addEventListener("click", () => setOpen(false, true));
+
+  // Tapping any link in the menu (including Log out) closes it
+  sidebar.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!isOpen()) return;
+
+    if (event.key === "Escape") {
+      setOpen(false, true);
+      return;
+    }
+
+    // Keep Tab inside the open menu
+    if (event.key === "Tab") {
+      const focusable = sidebar.querySelectorAll("a[href], button");
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  // Swipe left on the menu to close it
+  let touchX = null;
+  sidebar.addEventListener(
+    "touchstart",
+    (event) => {
+      touchX = event.touches[0].clientX;
+    },
+    { passive: true },
+  );
+  sidebar.addEventListener(
+    "touchend",
+    (event) => {
+      if (touchX !== null && touchX - event.changedTouches[0].clientX > 60) {
+        setOpen(false, true);
+      }
+      touchX = null;
+    },
+    { passive: true },
+  );
+
+  // Rotating a tablet or resizing a window past the breakpoint: reset
+  function onBreakpointChange() {
+    if (!phone.matches) setOpen(false);
+  }
+  if (phone.addEventListener) phone.addEventListener("change", onBreakpointChange);
+  else phone.addListener(onBreakpointChange); // older Safari
+}
+
+// ============================================================
 // START — runs once the page's HTML has loaded
 // ============================================================
 document.addEventListener("DOMContentLoaded", () => {
@@ -2291,6 +2420,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applyRole();
   showUserInSidebar();
   highlightActiveNav();
+  setupMobileNav();
   setupThemeToggle();
   setupLoginForm();
   setupLoginSpotlight();

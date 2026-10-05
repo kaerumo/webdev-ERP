@@ -6,7 +6,7 @@
    Sections: 1 Tokens & base · 2 Typography · 3 Layout · 4 Sidebar ·
    5 Buttons & forms · 6 Cards & panels · 7 Toolbar · 8 Table ·
    9 Dashboard widgets · 10 Toast & modals · 11 Login · 12 Motion ·
-   13 Responsive
+   13 Responsive · 14 Mobile
    ========================================================================== */
 
 /* ---------- 1. Tokens & base ----------
@@ -1642,140 +1642,8 @@ tbody td a.delete-link:hover {
   }
 }
 
-@media (max-width: 768px) {
-  .app-shell {
-    flex-direction: column;
-  }
-
-  /* The sidebar turns into a top bar */
-  .sidebar {
-    position: static;
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px 16px;
-    overflow-x: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .sidebar-brand {
-    border-bottom: none;
-    padding: 0 14px 0 0;
-    margin-bottom: 0;
-    white-space: nowrap;
-  }
-
-  .sidebar-brand img {
-    width: 34px;
-    height: 34px;
-  }
-  .brand-text small {
-    display: none;
-  }
-
-  .sidebar-nav {
-    display: flex;
-  }
-
-  .sidebar-nav li a {
-    padding: 8px 14px;
-    border-left: none;
-    border-bottom: 3px solid transparent;
-    white-space: nowrap;
-  }
-
-  .sidebar-nav li a:hover {
-    padding-left: 14px;
-  }
-
-  .sidebar-nav li a.is-active {
-    background: none;
-    border-bottom-color: var(--crimson-bright);
-  }
-
-  /* Keep Log out reachable: it sits at the end of the top bar */
-  .sidebar-footer {
-    border-top: none;
-    padding: 0 0 0 8px;
-    margin-left: auto;
-    white-space: nowrap;
-  }
-
-  .user-chip {
-    display: none;
-  }
-  .sidebar-footer a {
-    padding: 8px 10px;
-  }
-  .sidebar-footer .theme-toggle {
-    width: auto;
-    padding: 8px 10px;
-  }
-  .theme-toggle span {
-    display: none !important; /* icon only in the top bar */
-  }
-
-  .main-content {
-    padding: 24px 16px 40px;
-  }
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  .search-wrap {
-    max-width: none;
-  }
-  .toast {
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .sidebar {
-    padding: 10px 8px;
-  }
-  .sidebar-nav li a {
-    padding: 8px 9px;
-    font-size: 0.85rem;
-  }
-  .sidebar-footer a {
-    padding: 8px;
-    font-size: 0.85rem;
-  }
-  .nav-icon {
-    display: none;
-  }
-  .brand-text {
-    display: none;
-  }
-}
-
-/* Very narrow phones: with 4 nav links the top bar no longer fits in one row.
-   Brand + theme/Log out stay on the first row, the links get their own row. */
-@media (max-width: 400px) {
-  .sidebar {
-    flex-wrap: wrap;
-    row-gap: 4px;
-  }
-  .sidebar-brand {
-    margin-right: auto;
-    padding-right: 0;
-  }
-  .sidebar-footer {
-    order: 2;
-    margin-left: 0;
-    padding-left: 0;
-  }
-  .sidebar-nav {
-    order: 3;
-    width: 100%;
-    justify-content: space-around;
-  }
-}
+/* Phone layout (menu, card tables, bottom-sheet modals) lives in
+   section 14 at the end of this file. */
 
 /* ---------- 9c. Backup panel ---------- */
 .backup-note {
@@ -2279,5 +2147,668 @@ body.report-page {
 @media print {
   .site-footer {
     display: none;
+  }
+}
+
+/* ---------- 14. Mobile (phones & small tablets) ----------
+   Kept at the END of the file on purpose: these rules override the
+   page-specific sections above, so they have to come after them.
+
+   - Sidebar becomes a slide-in menu opened from a top bar (the bar, the
+     backdrop and the close button are added by setupMobileNav() in main.js)
+   - Inventory / Officers / Change log tables become one card per row
+     (the "Sort by" chips replace the column headers)
+   - Modals become bottom sheets
+   - Inputs are 16px so iOS Safari does not zoom in when you tap them */
+
+/* Hidden on desktop; shown by the mobile query below */
+.mobile-bar,
+.nav-backdrop,
+.nav-close {
+  display: none;
+}
+
+/* Touch screens have no hover, so skip the hover "lift" effects (they stick
+   after a tap) and the "/" shortcut hint */
+@media (hover: none) {
+  .btn:hover,
+  .stat-card:hover,
+  .contact-card:hover {
+    transform: none;
+  }
+  tbody tr:hover {
+    box-shadow: none;
+  }
+  .sidebar-nav li a:hover {
+    padding-left: 22px;
+  }
+  .search-wrap kbd {
+    display: none;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body.nav-open {
+    overflow: hidden; /* page behind the open menu does not scroll */
+  }
+
+  /* ----- Shell + top bar ----- */
+  .app-shell {
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    height: 56px;
+    padding: 0 12px;
+    background: var(--charcoal);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .menu-btn,
+  .nav-close {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .menu-btn svg,
+  .nav-close svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .mobile-bar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .mobile-bar-brand img {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 3px var(--crimson);
+  }
+
+  .mobile-bar-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ----- Sidebar = slide-in menu ----- */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 150;
+    width: min(86vw, 320px);
+    height: auto;
+    padding: 18px 0 calc(16px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(-100%);
+    visibility: hidden; /* closed menu cannot be tabbed into */
+    transition:
+      transform 0.25s ease,
+      visibility 0s linear 0.25s;
+  }
+
+  .sidebar.is-open {
+    transform: none;
+    visibility: visible;
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
+    transition: transform 0.25s ease;
+  }
+
+  .nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 140;
+    background: rgba(10, 10, 11, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.25s ease,
+      visibility 0s linear 0.25s;
+  }
+
+  .nav-backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease;
+  }
+
+  .nav-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: none;
+    color: var(--steel);
+  }
+
+  .sidebar-brand {
+    padding-right: 68px; /* keep clear of the close button */
+  }
+
+  .sidebar-nav li a {
+    padding: 14px 22px;
+  }
+  .sidebar-nav li a:hover {
+    padding-left: 22px;
+  }
+
+  .sidebar-footer a,
+  .theme-toggle {
+    padding: 12px 0;
+  }
+
+  /* ----- Page content ----- */
+  .main-content {
+    width: 100%;
+    max-width: none;
+    padding: 20px 16px 32px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+
+  .page-header > .btn {
+    text-align: center;
+  }
+
+  .quick-actions .btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .btn {
+    padding: 12px 18px; /* about 44px tall: easy to hit with a thumb */
+  }
+
+  .panel {
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  .panel-header {
+    flex-wrap: wrap;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .stat-card {
+    padding: 14px 14px 12px;
+  }
+
+  .stat-card .stat-value {
+    font-size: 2rem;
+  }
+
+  .dash-grid {
+    gap: 18px;
+  }
+
+  /* ----- Search + filters ----- */
+  .toolbar {
+    gap: 10px;
+  }
+
+  .search-wrap {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .search-wrap kbd {
+    display: none; /* the "/" shortcut is for keyboards */
+  }
+
+  .toolbar-filters {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .toolbar-filters select {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+
+  .toolbar-filters .btn {
+    flex: 1 1 100%;
+  }
+
+  .result-count {
+    flex: 1 1 100%;
+    margin: 0;
+  }
+
+  .log-date {
+    flex: 1 1 140px;
+  }
+
+  .log-date input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* 16px stops iOS Safari from zooming the page when a field is focused */
+  .form-field input,
+  .form-field select,
+  .form-field textarea,
+  .toolbar input,
+  .toolbar-filters select,
+  .log-date input {
+    font-size: 16px;
+  }
+
+  /* ----- Tables -> cards (Inventory, Officers, Change log) ----- */
+  .panel table,
+  .panel tbody {
+    display: block;
+  }
+
+  /* Column headers become "Sort by" chips (tap one to sort, tap again to flip) */
+  .panel thead {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .panel thead::before {
+    content: "Sort by";
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--steel);
+  }
+
+  .panel thead tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .panel thead th {
+    padding: 9px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+  }
+
+  .panel thead th[aria-sort] {
+    border-color: var(--crimson-bright);
+    color: var(--hover-text);
+  }
+
+  .panel thead th:not([data-sort]) {
+    display: none; /* "Actions" is not a sort option */
+  }
+
+  #logTable thead {
+    display: none; /* the change log is not sortable */
+  }
+
+  .panel tbody tr {
+    display: block;
+    margin-bottom: 12px;
+    padding: 14px 14px 6px;
+    background: var(--ink);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--crimson);
+    border-radius: var(--radius);
+  }
+
+  /* display:block above would otherwise beat the hidden attribute that the
+     search / filters use to hide rows */
+  .panel tbody tr[hidden] {
+    display: none;
+  }
+
+  .panel tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .panel tbody tr:hover {
+    background: var(--ink);
+    box-shadow: none;
+  }
+
+  .panel tbody td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+  }
+
+  /* The small label before each value comes from data-label (set in main.js) */
+  .panel tbody td::before {
+    content: attr(data-label);
+    flex: none;
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--steel);
+  }
+
+  .panel tbody td:not([data-label])::before {
+    content: none;
+  }
+
+  /* First cell (item / officer name) = card title */
+  .panel tbody td:first-child:not([data-label]) {
+    justify-content: flex-start;
+    padding-top: 0;
+    font-size: 1.02rem;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  /* Last cell = the action links, with bigger tap targets */
+  .panel tbody td:last-child:not([data-label]) {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0 22px;
+    border-bottom: none;
+    text-align: left;
+  }
+
+  .panel tbody td a {
+    margin-right: 0;
+    padding: 10px 0;
+  }
+
+  .qty-cell {
+    justify-content: flex-end;
+  }
+
+  .meter {
+    max-width: 90px;
+    background: var(--charcoal-raised);
+  }
+
+  @supports selector(:has(*)) {
+    .panel:has(> table),
+    .panel:has(> .table-scroll) {
+      padding: 0;
+      background: none;
+      border: none;
+    }
+
+    .panel:has(> table) tbody tr,
+    .panel:has(> .table-scroll) tbody tr {
+      background: var(--charcoal);
+    }
+
+    .panel:has(> table) tbody tr:hover,
+    .panel:has(> .table-scroll) tbody tr:hover {
+      background: var(--charcoal);
+    }
+  }
+
+  /* Change log: long text, so the label sits above the value instead */
+  #logTable tbody td {
+    display: block;
+    padding: 8px 0;
+    text-align: left;
+  }
+
+  #logTable tbody td::before {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  #logTable tbody td:last-child {
+    border-bottom: none;
+  }
+
+  /* ----- Dashboard lists ----- */
+  .activity-list li {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+
+  .activity-list span.msg {
+    flex: 1 1 calc(100% - 21px);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .activity-list time {
+    flex-basis: 100%;
+    margin: 0 0 0 21px; /* lines up under the text, after the dot */
+  }
+
+  .low-list li {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .low-info {
+    flex: 1 1 100%;
+  }
+
+  .low-list .meter {
+    flex: 1 1 80px;
+    max-width: none;
+  }
+
+  /* ----- Events + calendar ----- */
+  .cal-header {
+    flex-wrap: wrap;
+  }
+
+  .cal-nav .btn {
+    padding: 10px 14px;
+  }
+
+  .cal-weekdays,
+  .cal-grid {
+    gap: 3px;
+  }
+
+  .cal-cell {
+    min-height: 56px;
+    padding: 5px;
+  }
+
+  .cal-dots {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .event-item {
+    flex-wrap: wrap;
+  }
+
+  .event-actions {
+    width: 100%;
+    padding-left: 62px; /* under the text, past the date box */
+  }
+
+  .event-actions a {
+    padding: 8px 0;
+  }
+
+  /* ----- Modals become bottom sheets ----- */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-box {
+    max-width: none;
+    max-height: 92vh;
+    max-height: 92dvh;
+    padding: 22px 18px calc(22px + env(safe-area-inset-bottom, 0px));
+    border-radius: 14px 14px 0 0;
+  }
+
+  .modal-overlay.is-open .modal-box {
+    animation: sheet-up 0.25s ease;
+  }
+
+  .modal-close {
+    top: 6px;
+    right: 6px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.8rem;
+  }
+
+  .modal-box li {
+    flex-wrap: wrap;
+    gap: 2px 16px;
+  }
+
+  .modal-box li span:last-child {
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+
+  .toast {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ----- Login ----- */
+  .login-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+    align-content: center;
+    gap: 24px;
+    padding: 28px 16px calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero-logo {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 14px;
+  }
+
+  .year-tags {
+    margin-top: 16px;
+  }
+
+  .login-card {
+    padding: 28px 20px 22px;
+  }
+
+  /* ----- About / Contact / Footer / Report ----- */
+  .contact-card {
+    padding: 16px;
+  }
+
+  .contact-panel .btn {
+    width: 100%;
+  }
+
+  .site-footer {
+    margin-top: 40px;
+  }
+
+  .report-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .report-toolbar .btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cal-cell {
+    min-height: 50px;
+    padding: 4px;
+  }
+
+  .cal-day {
+    font-size: 0.8rem;
+  }
+
+  .report-head h1 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Very small phones (320 - 360px) */
+@media screen and (max-width: 360px) {
+  .main-content {
+    padding: 16px 12px 28px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .panel {
+    padding: 14px 12px;
+  }
+
+  .stat-card .stat-value {
+    font-size: 1.7rem;
+  }
+
+  .panel tbody tr {
+    padding: 12px 12px 4px;
   }
 }

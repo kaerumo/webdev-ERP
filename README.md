@@ -77,7 +77,7 @@ Backup and report
 
 - Dashboard > Backup & reports: "Download backup" saves everything (inventory, officers, events, activity) as a .json file, so data survives clearing the browser or switching devices
 - "Restore from backup" validates the file first (wrong app, bad quantities, duplicate ids are rejected and nothing changes), asks for confirmation, then replaces the current data. Admin only. Older backups without events still restore
-- "Print report" opens report.html: a light-themed summary (stats, low stock, inventory, officers, upcoming events) for Print / Save as PDF
+- "Print report" opens report.html: a summary (stats, low stock, inventory, officers, upcoming events) for Print / Save as PDF. It follows the app theme on screen and is always light when printed (see Oct 5, 2026)
 
 Change log
 
@@ -115,3 +115,25 @@ Known limits (no server)
 - Deleting `itpc_devkey` in DevTools makes the next load count as a first run, so existing data is accepted once and re-sealed
 - Someone who reads the device key from Local Storage can forge a session seal. Real protection against this needs a backend
 - Passwords and the sealing key are only as safe as the browser they run in
+
+(Added Oct 5, 2026)
+
+About, Contact and footer
+
+- New About page (`about.html`): what ITPC is, what the system does, and who built it
+- New Contact page (`contact.html`): email and Facebook links, plus a message form. There is no server, so the form opens the visitor's email app with the subject and message filled in
+- Footer on every app page (Dashboard, Inventory, Officers, Events, Change log, About, Contact): quick links, contact details, copyright and developer credit. It is hidden when printing
+- "About" and "Contact" links added to the sidebar on every page
+- Contact form logic lives in `js/main.js` (section M, `setupContactForm`)
+- Footer, About and Contact styles are in section 9f of `css/style.css`
+
+Report
+
+- The printable report now follows the app's dark/light theme on screen. When printing or saving as PDF it switches to fixed light colors so it prints cleanly
+- `report.html` now loads the saved theme in `<head>`, like the other pages
+
+Contact details
+
+- Email: itprogramcouncil@gmail.com
+- Facebook: https://web.facebook.com/DLSUD.ITPC
+- Developed by James Montuya and Wyethh Yumang
